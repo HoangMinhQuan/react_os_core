@@ -52,6 +52,12 @@ export default function CustomizeList() {
         </ListItemIcon>
         <ListItemText primary="Table"/>
       </ListItem>
+      <ListItem button component={Link} to="/login">
+        <ListItemIcon>
+          <DraftsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Login"/>
+      </ListItem>
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
           <InboxIcon />

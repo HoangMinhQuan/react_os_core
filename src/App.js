@@ -26,10 +26,14 @@ const retry = (fn, retriesLeft = 1, interval = 1000) => {
 const TodoComponent = lazy(() => retry(() => import('./components/Todo')))
 
 const TableComponent = lazy(() => retry(() => import('./components/Table')))
+
 const Login = lazy(() => retry(() => import('./components/Login')))
+
+const QuenMatKhau = lazy(() => retry(() => import('./components/Login/QuenMatKhau')))
 
 // Store
 const reduxStore = configureStore(window.REDUX_INITIAL_DATA);
+
 
 function App() {
   return (
@@ -41,6 +45,7 @@ function App() {
             <Route path="/todo" component={TodoComponent} />
             <Route path="/table" component={TableComponent} />
             <Route path="/login" component={Login} />
+            <Route path="/quenmatkhau" component={QuenMatKhau} />
           </Switch>
         </Suspense>
       </Layout>

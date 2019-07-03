@@ -13,6 +13,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {Link} from 'react-router-dom'
+import { withFormik } from "formik";
+import * as Yup from 'yup';
+import { FormHelperText } from "@material-ui/core";
+
 
 const useStyles = theme => ({
   '@global': {
@@ -43,8 +47,8 @@ class Login extends Component {
 
   render(){
 
-    const { classes } = this.props;
-
+    const { classes, values, handleChange, handleSubmit, errors } = this.props;
+  
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -52,7 +56,7 @@ class Login extends Component {
           <Typography component="h1" variant="h5">
           Đăng Nhập
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -63,7 +67,10 @@ class Login extends Component {
               name="name"
               autoComplete="name"
               autoFocus
+              value={values.name}
+              onChange={handleChange}
             />
+            <FormHelperText>{errors.name}</FormHelperText>
             <TextField
               variant="outlined"
               margin="normal"
@@ -74,24 +81,24 @@ class Login extends Component {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={values.password}
+              onChange={handleChange}    
             />
+            <FormHelperText>{errors.password}</FormHelperText>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              component={Link} to="/quenmatkhau"
+              
             >
               Đăng Nhập
             </Button>
 
-            <FormControl component={Link} to="/quenmatkhau">
-              <Button>
-                 Quên Mật Khẩu ?
+              <Button component={Link} to="/quenmatkhau">
+                Quên Mật Khẩu ?
               </Button>
-            </FormControl>
-            
           </form>
         </div>  
       </Container>
@@ -99,4 +106,38 @@ class Login extends Component {
   }
 }
 
-export default withStyles(useStyles)(Login) ;
+const FormikForm = withFormik({
+
+  mapPropsToValues(){
+    return{
+      name:"",
+      password:"",
+    }
+  },
+
+  handleSubmit(value,{resetForm}){
+    console.log(JSON.stringify(value,null,2))
+    resetForm({
+      name:"",
+      password:"",
+    })
+  },
+
+  validationSchema:Yup.object().shape({
+
+    name:Yup
+    .string()
+    .required("Tên đăng nhập là bắt buộc")
+    .min(5,'Tên đăng nhập ít nhất 5 kí tự')
+    .max(30,'Tên đăng nhập nhiều nhất là 30 kí tự'),
+
+    password:Yup
+    .string()
+    .required("Mật khẩu là bắt buộc")
+    .min(5,'Mật khẩu ít nhất 5 kí tự')
+    .max(30,'Mật khẩu nhiều nhất là 30 kí tự')
+
+  }),
+})(Login)
+
+export default withStyles(useStyles)(FormikForm);
